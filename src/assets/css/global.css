@@ -215,3 +215,39 @@ main {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* src/assets/css/global.css */
+
+/* ... (tus estilos globales existentes) ... */
+
+/* * NUEVO: Estilos para el Tema Oscuro
+ */
+body.dark-theme {
+    --color-primario: var(--dark-color-primario);
+    --color-secundario: var(--dark-color-secundario);
+    --color-acento: var(--dark-color-acento);
+    --color-fondo: var(--dark-color-fondo);
+    --color-texto: var(--dark-color-texto);
+
+    /* Sobreescribir estilos de componentes específicos */
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+/* Ajustes para componentes en modo oscuro */
+body.dark-theme .about__card,
+body.dark-theme .timeline__content,
+body.dark-theme .team-member,
+body.dark-theme .contact__form-container,
+body.dark-theme .project-card {
+    background-color: var(--dark-color-superficie);
+    border-color: #333;
+}
+
+body.dark-theme .header.scrolled {
+    background-color: var(--dark-color-superficie);
+}
+
+body.dark-theme .footer {
+    background-color: #0F0F0F;
+}

@@ -64,4 +64,10 @@
     --border-radius: 4px;
     --border-radius-md: 8px;
     --border-radius-lg: 12px;
+    --dark-color-primario: #E0E0E0;
+    --dark-color-secundario: #616161;
+    --dark-color-acento: #D4B275;
+    --dark-color-fondo: #121212;
+    --dark-color-texto: #EAEAEA;
+    --dark-color-superficie: #1E1E1E;
 }

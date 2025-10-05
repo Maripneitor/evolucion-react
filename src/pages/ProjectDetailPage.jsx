@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { projectsData } from '../data/proyectosData';
 
+// Importa el Lightbox y sus estilos
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+
 function ProjectDetailPage() {
   const { id } = useParams(); // Obtiene el 'id' de la URL -> /proyecto/:id
   const project = projectsData.find(p => p.id === parseInt(id));
@@ -9,8 +13,17 @@ function ProjectDetailPage() {
   // Estado para manejar la posición del slider de comparación
   const [sliderPosition, setSliderPosition] = useState(50);
 
+  // Estado para el Lightbox
+  const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const handleSliderChange = (e) => {
     setSliderPosition(e.target.value);
+  };
+
+  const openLightbox = (index) => {
+    setCurrentIndex(index);
+    setOpen(true);
   };
 
   // Si no se encuentra el proyecto, muestra un mensaje de error amigable.
@@ -108,14 +121,19 @@ function ProjectDetailPage() {
         </div>
       </section>
 
-      {/* Galería adicional */}
+      {/* Galería adicional - MODIFICADA con Lightbox */}
       {project.gallery && project.gallery.length > 0 && (
         <section className="project-gallery">
           <div className="container">
             <h2>Galería del Proyecto</h2>
             <div className="gallery-grid">
               {project.gallery.map((imgUrl, index) => (
-                <div key={index} className="gallery-item">
+                <div 
+                  key={index} 
+                  className="gallery-item" 
+                  onClick={() => openLightbox(index)} // <-- Añade el onClick
+                  style={{ cursor: 'pointer' }} // <-- Añade cursor para indicar que es clickeable
+                >
                   <img src={imgUrl} alt={`Imagen ${index + 1} del proyecto ${project.title}`} loading="lazy" />
                 </div>
               ))}
@@ -123,6 +141,14 @@ function ProjectDetailPage() {
           </div>
         </section>
       )}
+
+      {/* Componente Lightbox */}
+      <Lightbox
+        open={open}
+        close={() => setOpen(false)}
+        slides={project.gallery ? project.gallery.map(url => ({ src: url })) : []}
+        index={currentIndex}
+      />
     </main>
   );
 }

@@ -1,8 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+
+// Pequeño componente para una tarjeta animada
+function AnimatedCard({ icon, title, children }) {
+  const [ref, entry] = useIntersectionObserver({ threshold: 0.2, triggerOnce: true });
+  const isVisible = entry?.isIntersecting;
+
+  return (
+    <div ref={ref} className={`about__card fade-in-section ${isVisible ? 'is-visible' : ''}`}>
+      <div className="about__card-icon">{icon}</div>
+      <h3 className="about__card-title">{title}</h3>
+      <p className="about__card-text">{children}</p>
+    </div>
+  );
+}
 
 function AboutSection() {
   const [filter, setFilter] = useState('all');
-  const itemRefs = useRef([]); // Referencia para guardar los nodos del DOM
+  const itemRefs = useRef([]);
 
   const timelineItemsData = [
     { year: 2010, title: 'Fundación de Evolución', description: 'Creación de la empresa con el objetivo de unir arqueología científica y técnicas de restauración innovadoras.', category: 'arqueologia' },
@@ -15,8 +30,8 @@ function AboutSection() {
     { year: 2023, title: 'Proyecto Subacuático', description: 'Inicio de excavación arqueológica subacuática en pecio romano del Mediterráneo.', category: 'arqueologia' }
   ];
 
-  const filteredItems = filter === 'all'
-    ? timelineItemsData
+  const filteredItems = filter === 'all' 
+    ? timelineItemsData 
     : timelineItemsData.filter(item => item.category === filter);
 
   useEffect(() => {
@@ -53,26 +68,20 @@ function AboutSection() {
       <div className="container">
         <h2 className="about__title">Nuestra Historia y Compromiso</h2>
 
-        {/* Misión, Visión y Valores */}
+        {/* Misión, Visión y Valores - Ahora con AnimatedCard */}
         <div className="about__grid">
-          <div className="about__card">
-            <div className="about__card-icon">🎯</div>
-            <h3 className="about__card-title">Misión</h3>
-            <p className="about__card-text">Preservar, estudiar y restaurar el patrimonio arqueológico mediante técnicas innovadoras, contribuyendo al conocimiento histórico y al disfrute cultural de las generaciones presentes y futuras.</p>
-          </div>
-          <div className="about__card">
-            <div className="about__card-icon">🔭</div>
-            <h3 className="about__card-title">Visión</h3>
-            <p className="about__card-text">Ser referentes internacionales en arqueología y restauración, reconocidos por nuestro rigor científico, compromiso ético y contribución a la conservación del patrimonio cultural mundial.</p>
-          </div>
-          <div className="about__card">
-            <div className="about__card-icon">💎</div>
-            <h3 className="about__card-title">Valores</h3>
-            <p className="about__card-text">Excelencia científica, respeto por el patrimonio, compromiso con la educación, innovación responsable y colaboración interdisciplinaria en todos nuestros proyectos.</p>
-          </div>
+          <AnimatedCard icon="🎯" title="Misión">
+            Preservar, estudiar y restaurar el patrimonio arqueológico mediante técnicas innovadoras, contribuyendo al conocimiento histórico y al disfrute cultural de las generaciones presentes y futuras.
+          </AnimatedCard>
+          <AnimatedCard icon="🔭" title="Visión">
+            Ser referentes internacionales en arqueología y restauración, reconocidos por nuestro rigor científico, compromiso ético y contribución a la conservación del patrimonio cultural mundial.
+          </AnimatedCard>
+          <AnimatedCard icon="💎" title="Valores">
+            Excelencia científica, respeto por el patrimonio, compromiso con la educación, innovación responsable y colaboración interdisciplinaria en todos nuestros proyectos.
+          </AnimatedCard>
         </div>
 
-        {/* Línea de tiempo interactiva */}
+        {/* Línea de tiempo interactiva - Se mantiene igual */}
         <div className="timeline">
           <h3 className="timeline__title">Nuestra Trayectoria</h3>
           <div className="timeline__filters">
@@ -101,7 +110,7 @@ function AboutSection() {
           </div>
         </div>
 
-        {/* Nueva sección: Equipo de Expertos */}
+        {/* Nueva sección: Equipo de Expertos - Se mantiene igual */}
         <section className="team-section">
           <h2 className="team-section__title">Conoce a Nuestros Expertos</h2>
           <p className="team-section__description">Nuestro equipo multidisciplinario combina experiencia académica con práctica de campo para ofrecer soluciones integrales en arqueología y restauración.</p>
@@ -114,7 +123,6 @@ function AboutSection() {
               <p className="team-member__role">Directora de Arqueología</p>
               <p className="team-member__bio">Especialista en culturas mesoamericanas con más de 15 años de experiencia en excavaciones. PhD en Arqueología por la Universidad Nacional Autónoma de México.</p>
             </div>
-            {/* ... Los otros miembros del equipo ... */}
             <div className="team-member">
                 <div className="team-member__image">
                     <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Dr. Carlos Méndez - Jefe de Restauración" />

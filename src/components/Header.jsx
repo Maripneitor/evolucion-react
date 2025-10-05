@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react'; // <-- Añade useContext
 import { Link, NavLink } from 'react-router-dom';
+import { ThemeContext } from '../context/ThemeContext'; // <-- Importa el contexto
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext); // <-- Usa el contexto
 
   useEffect(() => {
     // Lógica para el estilo de scroll
@@ -51,6 +53,11 @@ function Header() {
             </li>
           </ul>
         </nav>
+
+        {/* NUEVO: Botón para cambiar tema */}
+        <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Cambiar tema">
+          {theme === 'light' ? '🌙' : '☀️'}
+        </button>
 
         {/* Botón hamburguesa con su lógica */}
         <button
