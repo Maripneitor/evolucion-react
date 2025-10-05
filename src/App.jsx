@@ -1,10 +1,10 @@
-// src/App.jsx
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ScrollToTopButton from './components/ScrollToTopButton'; // <-- Importa el componente
 import HomePage from './pages/HomePage';
-import ProjectsPage from './pages/ProjectsPage'; // Debes crear esta página
-import ProjectDetailPage from './pages/ProjectDetailPage'; // Debes crear esta página
+import ProjectsPage from './pages/ProjectsPage';
+import ProjectDetailPage from './pages/ProjectDetailPage';
 
 function App() {
   return (
@@ -15,10 +15,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/proyectos" element={<ProjectsPage />} />
           <Route path="/proyecto/:id" element={<ProjectDetailPage />} />
-          {/* El :id es un parámetro dinámico para cada proyecto */}
         </Routes>
       </main>
       <Footer />
+      <ScrollToTopButton /> {/* <-- Añade el botón aquí */}
     </>
   );
 }

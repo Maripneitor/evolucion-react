@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function AboutSection() {
   const [filter, setFilter] = useState('all');
+  const itemRefs = useRef([]); // Referencia para guardar los nodos del DOM
 
-  // Datos de la línea de tiempo extraídos de tu acerca.html
   const timelineItemsData = [
     { year: 2010, title: 'Fundación de Evolución', description: 'Creación de la empresa con el objetivo de unir arqueología científica y técnicas de restauración innovadoras.', category: 'arqueologia' },
     { year: 2012, title: 'Excavación Templo Maya', description: 'Descubrimiento y documentación de un templo ceremonial maya en la península de Yucatán.', category: 'arqueologia' },
@@ -15,10 +15,38 @@ function AboutSection() {
     { year: 2023, title: 'Proyecto Subacuático', description: 'Inicio de excavación arqueológica subacuática en pecio romano del Mediterráneo.', category: 'arqueologia' }
   ];
 
-  // Lógica para filtrar los items según el estado 'filter'
   const filteredItems = filter === 'all'
     ? timelineItemsData
     : timelineItemsData.filter(item => item.category === filter);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 } // El elemento se considera visible cuando el 10% está en pantalla
+    );
+
+    const currentRefs = itemRefs.current;
+    currentRefs.forEach(item => {
+      if (item) {
+        observer.observe(item);
+      }
+    });
+
+    return () => {
+      currentRefs.forEach(item => {
+        if (item) {
+          observer.unobserve(item);
+        }
+      });
+    };
+  }, [filteredItems]); // El efecto se vuelve a ejecutar si el filtro cambia
 
   return (
     <section className="about" id="nosotros">
@@ -56,7 +84,12 @@ function AboutSection() {
           <div className="timeline__line"></div>
           <div className="timeline__items">
             {filteredItems.map((item, index) => (
-              <div key={index} className="timeline__item" data-category={item.category}>
+              <div 
+                key={index} 
+                className="timeline__item" 
+                data-category={item.category}
+                ref={el => (itemRefs.current[index] = el)} // Asigna el elemento del DOM a nuestra referencia
+              >
                 <div className="timeline__dot"></div>
                 <div className="timeline__content">
                   <div className="timeline__year">{item.year}</div>
@@ -81,29 +114,30 @@ function AboutSection() {
               <p className="team-member__role">Directora de Arqueología</p>
               <p className="team-member__bio">Especialista en culturas mesoamericanas con más de 15 años de experiencia en excavaciones. PhD en Arqueología por la Universidad Nacional Autónoma de México.</p>
             </div>
+            {/* ... Los otros miembros del equipo ... */}
             <div className="team-member">
-              <div className="team-member__image">
-                <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Dr. Carlos Méndez - Jefe de Restauración" />
-              </div>
-              <h3 className="team-member__name">Dr. Carlos Méndez</h3>
-              <p className="team-member__role">Jefe de Restauración</p>
-              <p className="team-member__bio">Experto en conservación de monumentos históricos y técnicas de restauración no invasivas. Ha liderado proyectos en 10 países diferentes.</p>
+                <div className="team-member__image">
+                    <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Dr. Carlos Méndez - Jefe de Restauración" />
+                </div>
+                <h3 className="team-member__name">Dr. Carlos Méndez</h3>
+                <p className="team-member__role">Jefe de Restauración</p>
+                <p className="team-member__bio">Experto en conservación de monumentos históricos y técnicas de restauración no invasivas. Ha liderado proyectos en 10 países diferentes.</p>
             </div>
             <div className="team-member">
-              <div className="team-member__image">
-                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Dra. Sofia Chen - Investigadora Principal" />
-              </div>
-              <h3 className="team-member__name">Dra. Sofia Chen</h3>
-              <p className="team-member__role">Investigadora Principal</p>
-              <p className="team-member__bio">Pionera en la aplicación de tecnologías LIDAR y drones para prospección arqueológica. Autora de más de 20 publicaciones científicas.</p>
+                <div className="team-member__image">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Dra. Sofia Chen - Investigadora Principal" />
+                </div>
+                <h3 className="team-member__name">Dra. Sofia Chen</h3>
+                <p className="team-member__role">Investigadora Principal</p>
+                <p className="team-member__bio">Pionera en la aplicación de tecnologías LIDAR y drones para prospección arqueológica. Autora de más de 20 publicaciones científicas.</p>
             </div>
             <div className="team-member">
-              <div className="team-member__image">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Lic. Alejandro Torres - Coordinador de Campo" />
-              </div>
-              <h3 className="team-member__name">Lic. Alejandro Torres</h3>
-              <p className="team-member__role">Coordinador de Campo</p>
-              <p className="team-member__bio">Especialista en logística de excavaciones y gestión de equipos multidisciplinarios. Con experiencia en proyectos de alta complejidad.</p>
+                <div className="team-member__image">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Lic. Alejandro Torres - Coordinador de Campo" />
+                </div>
+                <h3 className="team-member__name">Lic. Alejandro Torres</h3>
+                <p className="team-member__role">Coordinador de Campo</p>
+                <p className="team-member__bio">Especialista en logística de excavaciones y gestión de equipos multidisciplinarios. Con experiencia en proyectos de alta complejidad.</p>
             </div>
           </div>
         </section>

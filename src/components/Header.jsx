@@ -1,45 +1,68 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 function Header() {
-  // Efecto para el cambio de estilo del header con el scroll
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
+    // Lógica para el estilo de scroll
     const header = document.querySelector('.header');
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
+      header.classList.toggle('scrolled', window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Función para abrir/cerrar el menú móvil
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    document.body.classList.toggle('no-scroll', !isMenuOpen);
+  };
+
+  // Función para cerrar el menú al hacer clic en un enlace
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    document.body.classList.remove('no-scroll');
+  };
+
   return (
     <header className="header">
       <div className="container">
-        <Link to="/" className="header__logo">
+        <Link to="/" className="header__logo" onClick={closeMenu}>
           <span className="header__logo-icon">🏺</span>
           <span className="header__logo-text">Evolución</span>
         </Link>
-        <nav className="header__nav">
+
+        {/* Añadimos la clase 'active' dinámicamente */}
+        <nav className={`header__nav ${isMenuOpen ? 'active' : ''}`}>
           <ul className="header__nav-list">
             <li className="header__nav-item">
-              <NavLink to="/" className="header__nav-link">Inicio</NavLink>
+              <NavLink to="/" className="header__nav-link" onClick={closeMenu}>Inicio</NavLink>
             </li>
             <li className="header__nav-item">
-               <a href="/#nosotros" className="header__nav-link">Nosotros</a>
+              <a href="/#nosotros" className="header__nav-link" onClick={closeMenu}>Nosotros</a>
             </li>
             <li className="header__nav-item">
-              <NavLink to="/proyectos" className="header__nav-link">Proyectos</NavLink>
+              <NavLink to="/proyectos" className="header__nav-link" onClick={closeMenu}>Proyectos</NavLink>
             </li>
-             <li className="header__nav-item">
-               <a href="/#contacto" className="header__nav-link">Contacto</a>
+            <li className="header__nav-item">
+              <a href="/#contacto" className="header__nav-link" onClick={closeMenu}>Contacto</a>
             </li>
           </ul>
         </nav>
-        {/* Aquí iría la lógica del menú hamburguesa si se implementa */}
+
+        {/* Botón hamburguesa con su lógica */}
+        <button
+          className={`header__toggle ${isMenuOpen ? 'active' : ''}`}
+          aria-label="Abrir menú"
+          aria-expanded={isMenuOpen}
+          onClick={toggleMenu}
+        >
+          <span className="header__toggle-bar"></span>
+          <span className="header__toggle-bar"></span>
+          <span className="header__toggle-bar"></span>
+        </button>
       </div>
     </header>
   );
