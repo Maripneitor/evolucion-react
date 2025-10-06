@@ -251,3 +251,13 @@ body.dark-theme .header.scrolled {
 body.dark-theme .footer {
     background-color: #0F0F0F;
 }
+
+/* src/assets/css/global.css */
+
+/* ... (tus estilos existentes) ... */
+
+/* Estilo para el efecto de desenfoque de lazy loading */
+.lazy-load-image-background.blur {
+    filter: blur(15px);
+    transition: filter .3s;
+}

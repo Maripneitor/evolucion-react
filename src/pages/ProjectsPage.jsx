@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { projectsData } from '../data/proyectosData'; // Asegúrate que la ruta sea correcta
+import { projectsData } from '../data/proyectosData';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import ProjectCardSkeleton from '../components/ProjectCardSkeleton'; // <-- Importa el esqueleto
 
 function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('Todos');
+  const [isLoading, setIsLoading] = useState(true); // <-- NUEVO estado de carga
+
+  // Simula la carga de datos
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); // Espera 1.5 segundos
+    return () => clearTimeout(timer);
+  }, []);
 
   const categories = ['Todos', ...new Set(projectsData.map(p => p.category))];
 
@@ -16,45 +28,28 @@ function ProjectsPage() {
 
   return (
     <main>
-      <section className="page-hero">
-        <div className="container">
-          <h1 className="page-hero__title">Nuestros Proyectos</h1>
-          <p className="page-hero__description">Descubre los trabajos de arqueología y restauración que hemos realizado a lo largo de los años.</p>
-        </div>
-      </section>
-
+      <section className="page-hero">{/* ... */}</section>
       <section className="projects-section">
         <div className="container">
-          {/* Controles de Filtro y Búsqueda - NUEVO */}
-          <div className="projects-controls">
-            <div className="project-filters">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  className={filterCategory === category ? 'active' : ''}
-                  onClick={() => setFilterCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-            <div className="project-search">
-              <input
-                type="text"
-                placeholder="Buscar por título..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
+          <div className="projects-controls">{/* ... */}</div>
 
-          <div className="projects-grid" id="projects-grid-container">
-            {/* Verificamos si hay proyectos para mostrar */}
-            {filteredProjects.length > 0 ? (
+          <div className="projects-grid">
+            {/* Si está cargando, muestra los esqueletos */}
+            {isLoading ? (
+              Array.from({ length: 6 }).map((_, index) => (
+                <ProjectCardSkeleton key={index} />
+              ))
+            ) : filteredProjects.length > 0 ? (
+              // Si ya cargó, muestra los proyectos
               filteredProjects.map(project => (
                 <Link to={`/proyecto/${project.id}`} key={project.id} className="project-card">
                   <div className="project-card__image-container">
-                    <img src={project.image} alt={`Imagen de ${project.title}`} className="project-card__image" loading="lazy" />
+                    <LazyLoadImage
+                      alt={`Imagen de ${project.title}`}
+                      src={project.image}
+                      effect="blur"
+                      className="project-card__image"
+                    />
                     <span className="project-card__category">{project.category}</span>
                   </div>
                   <div className="project-card__content">
@@ -68,8 +63,7 @@ function ProjectsPage() {
                 </Link>
               ))
             ) : (
-              // Mensaje actualizado para búsquedas sin resultados
-              <p className="no-projects">No se encontraron proyectos que coincidan con tu búsqueda.</p>
+              <p className="no-projects">No se encontraron proyectos.</p>
             )}
           </div>
         </div>
