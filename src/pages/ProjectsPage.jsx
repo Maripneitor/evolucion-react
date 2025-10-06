@@ -3,44 +3,77 @@ import { Link } from 'react-router-dom';
 import { projectsData } from '../data/proyectosData';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import ProjectCardSkeleton from '../components/ProjectCardSkeleton'; // <-- Importa el esqueleto
+import ProjectCardSkeleton from '../components/ProjectCardSkeleton';
 
 function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('Todos');
-  const [isLoading, setIsLoading] = useState(true); // <-- NUEVO estado de carga
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Simula la carga de datos
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Espera 1.5 segundos
+    }, 1200); // Reducimos un poco el tiempo para una mejor UX
     return () => clearTimeout(timer);
   }, []);
 
+  // Obtenemos las categorías únicas de los datos, incluyendo "Todos"
   const categories = ['Todos', ...new Set(projectsData.map(p => p.category))];
 
+  // Filtramos los proyectos basándonos en la categoría y el término de búsqueda
   const filteredProjects = projectsData.filter(project => {
     const matchesCategory = filterCategory === 'Todos' || project.category === filterCategory;
-    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          project.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
     <main>
-      <section className="page-hero">{/* ... */}</section>
+      {/* 1. Contenido del Hero de la página */}
+      <section className="page-hero">
+        <div className="container">
+          <h1 className="page-hero__title">Nuestros Proyectos</h1>
+          <p className="page-hero__description">
+            Explora una selección de nuestras investigaciones arqueológicas y proyectos de restauración más destacados alrededor del mundo.
+          </p>
+        </div>
+      </section>
+      
       <section className="projects-section">
         <div className="container">
-          <div className="projects-controls">{/* ... */}</div>
+          {/* 2. Controles de Filtro y Búsqueda */}
+          <div className="projects-controls">
+            <div className="project-search">
+              <input
+                type="text"
+                placeholder="Buscar por nombre o descripción..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                aria-label="Buscar proyectos"
+              />
+            </div>
+            <div className="project-filters">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  className={`timeline__filter ${filterCategory === category ? 'active' : ''}`}
+                  onClick={() => setFilterCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="projects-grid">
-            {/* Si está cargando, muestra los esqueletos */}
             {isLoading ? (
+              // Mostramos 6 esqueletos mientras carga
               Array.from({ length: 6 }).map((_, index) => (
                 <ProjectCardSkeleton key={index} />
               ))
             ) : filteredProjects.length > 0 ? (
-              // Si ya cargó, muestra los proyectos
+              // Mapeamos sobre los proyectos ya filtrados
               filteredProjects.map(project => (
                 <Link to={`/proyecto/${project.id}`} key={project.id} className="project-card">
                   <div className="project-card__image-container">
@@ -49,6 +82,7 @@ function ProjectsPage() {
                       src={project.image}
                       effect="blur"
                       className="project-card__image"
+                      height="250" // Ayuda a prevenir saltos de layout
                     />
                     <span className="project-card__category">{project.category}</span>
                   </div>
@@ -63,7 +97,11 @@ function ProjectsPage() {
                 </Link>
               ))
             ) : (
-              <p className="no-projects">No se encontraron proyectos.</p>
+              // 3. Mensaje mejorado cuando no hay resultados
+              <div className="no-projects">
+                <h3>No se encontraron resultados</h3>
+                <p>Intenta ajustar tu búsqueda o limpiar los filtros.</p>
+              </div>
             )}
           </div>
         </div>
@@ -72,4 +110,4 @@ function ProjectsPage() {
   );
 }
 
-export default ProjectsPage;
+export default ProjectsPage;  

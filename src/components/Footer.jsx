@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import SocialLinks from './SocialLinks'; // <-- 1. Importa el nuevo componente
 
 function Footer() {
   return (
@@ -39,6 +40,8 @@ function Footer() {
         <div className="footer__divider"></div>
         <div className="footer__bottom">
             <p className="footer__copyright">© 2025 Evolución. Todos los derechos reservados.</p>
+            {/* 2. Reemplaza el div de social con el nuevo componente */}
+            <SocialLinks />
         </div>
       </div>
     </footer>

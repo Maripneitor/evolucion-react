@@ -1,5 +1,5 @@
 /**
- * hero.css - Estilos MEJORADOS para la sección hero del proyecto Evolución
+ * hero.css - Estilos MEJORADOS y CORREGIDOS para la sección hero del proyecto Evolución
  * Diseño visual impactante con gradientes sutiles
  */
 
@@ -41,7 +41,7 @@
     z-index: 2;
 }
 
-/* Fondo de cada slide - MEJORADO con zoom sutil */
+/* Fondo de cada slide */
 .slide__background {
     position: absolute;
     top: 0;
@@ -60,41 +60,33 @@
 }
 
 /* Asignar imágenes de fondo específicas a cada slide */
-.slide:nth-child(1) .slide__background {
+.slide-bg-1 {
     background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
 }
 
-.slide:nth-child(2) .slide__background {
+.slide-bg-2 {
     background-image: url('https://images.unsplash.com/photo-1533923156502-be31530547c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
 }
 
-.slide:nth-child(3) .slide__background {
+.slide-bg-3 {
     background-image: url('https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
 }
 
-.slide:nth-child(4) .slide__background {
+.slide-bg-4 {
     background-image: url('https://images.unsplash.com/photo-1583324113626-70df0f4deaab?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80');
 }
 
-/* ==========================================================================
-   CORRECCIÓN VISUAL: Overlay con gradiente para resaltar la imagen
-   ========================================================================== */
 .slide__overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.7) 0%, /* Negro semi-transparente abajo */
-        rgba(0, 0, 0, 0) 50%   /* Transparente hacia arriba */
-    );
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 50%);
     z-index: 1;
     pointer-events: none;
 }
 
-/* Contenido de cada slide - MEJORADO para mejor legibilidad */
 .slide__content {
     position: relative;
     z-index: 2;
@@ -118,7 +110,6 @@
     opacity: 1;
 }
 
-/* Título de la slide - MEJORADO tipografía */
 .slide__title {
     font-family: var(--font-principal);
     font-size: clamp(2.5rem, 5vw, 4rem);
@@ -129,7 +120,6 @@
     letter-spacing: -0.02em;
 }
 
-/* Descripción de la slide - MEJORADO legibilidad */
 .slide__description {
     font-family: var(--font-cuerpo);
     font-size: clamp(1.1rem, 2vw, 1.25rem);
@@ -141,13 +131,22 @@
     opacity: 0.95;
 }
 
-/* Controles de navegación - MEJORADO diseño */
+/* ==========================================================================
+   CORRECCIÓN DE ESTILOS: Controles de Navegación
+   ========================================================================== */
+
+/* 1. Contenedor principal de los controles */
 .slider-controls {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 4;
-    pointer-events: none;
+    pointer-events: none; /* No intercepta clics, solo sus hijos lo harán */
 }
 
+/* 2. Flechas de navegación (ahora dentro del contenedor) */
 .slider-arrow {
     position: absolute;
     top: 50%;
@@ -165,7 +164,7 @@
     justify-content: center;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     backdrop-filter: blur(12px);
-    pointer-events: all;
+    pointer-events: all; /* Habilita clics en las flechas */
     font-size: 1.5rem;
     font-weight: 300;
 }
@@ -184,19 +183,7 @@
     right: var(--space-5);
 }
 
-.slider-arrow[aria-disabled="true"] {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: translateY(-50%) scale(0.9);
-}
-
-.slider-arrow[aria-disabled="true"]:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-50%) scale(0.9);
-}
-
-/* Indicadores de puntos - MEJORADO diseño */
+/* 3. Indicadores de puntos (ahora dentro del contenedor) */
 .slider-dots {
     position: absolute;
     bottom: var(--space-6);
@@ -205,7 +192,7 @@
     display: flex;
     gap: var(--space-3);
     z-index: 5;
-    pointer-events: all;
+    pointer-events: all; /* Habilita clics en los puntos */
 }
 
 .slider-dot {
@@ -216,7 +203,6 @@
     background-color: transparent;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    position: relative;
     padding: 0;
 }
 
@@ -232,11 +218,12 @@
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-.slider-dot__inner {
-    display: none; /* Simplificado para mejor rendimiento */
-}
 
-/* Contenedor de botones */
+/* ==========================================================================
+   Fin de la corrección
+   ========================================================================== */
+
+/* Contenedor de botones y resto de estilos */
 .hero__content {
     position: relative;
     z-index: 3;
@@ -252,7 +239,6 @@
     flex-wrap: wrap;
 }
 
-/* Botones - MANTENIDOS con mejoras de rendimiento */
 .btn {
     display: inline-block;
     padding: var(--space-3) var(--space-6);
@@ -294,48 +280,7 @@
     box-shadow: 0 8px 25px rgba(201, 164, 105, 0.4);
 }
 
-/* Indicador de scroll */
-.hero__scroll-indicator {
-    position: absolute;
-    bottom: var(--space-6);
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    color: var(--color-blanco);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0.8;
-    animation: bounce 2s infinite;
-    pointer-events: none;
-}
-
-.hero__scroll-indicator span {
-    font-size: var(--fs-sm);
-    margin-bottom: var(--space-2);
-    font-family: var(--font-cuerpo);
-    opacity: 0.9;
-}
-
-.hero__scroll-line {
-    width: 2px;
-    height: 40px;
-    background: linear-gradient(to bottom, var(--color-blanco) 0%, transparent 100%);
-}
-
-/* Animaciones mejoradas */
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0) translateX(-50%);
-    }
-    40% {
-        transform: translateY(-8px) translateX(-50%);
-    }
-    60% {
-        transform: translateY(-4px) translateX(-50%);
-    }
-}
-
+/* Animaciones */
 .animate-slide-up {
     opacity: 0;
     animation: slideUp 0.8s ease forwards;
@@ -360,7 +305,7 @@
     animation-delay: 0.5s;
 }
 
-/* Estilos responsivos MEJORADOS */
+/* Estilos responsivos */
 @media (max-width: 768px) {
     .slide__title {
         font-size: clamp(2rem, 4vw, 3rem);
@@ -417,7 +362,7 @@
     }
     
     .slider-arrow {
-        display: flex; /* Siempre visibles en móvil */
+        display: flex;
         width: 44px;
         height: 44px;
     }
@@ -425,21 +370,5 @@
     .slider-dot {
         width: 12px;
         height: 12px;
-    }
-    
-    .hero__scroll-indicator {
-        bottom: var(--space-4);
-    }
-}
-
-/* Mejora de rendimiento para dispositivos táctiles */
-@media (hover: none) and (pointer: coarse) {
-    .slider-arrow:hover {
-        transform: translateY(-50%) scale(1);
-        background-color: rgba(255, 255, 255, 0.15);
-    }
-    
-    .btn:hover {
-        transform: none;
     }
 }
