@@ -10,6 +10,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import NotFoundPage from './pages/NotFoundPage'; // <-- Importa la nueva página
 import AnimatedPage from './components/AnimatedPage';
+import AddProjectPage from './pages/AddProjectPage'
 
 function App() {
   const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
             <Route path="*" element={
               <AnimatedPage><NotFoundPage /></AnimatedPage>
             } /> {/* <-- Añade la ruta 404 */}
+            <Route path="/admin/add-project" element={<AnimatedPage><AddProjectPage /></AnimatedPage>} />
           </Routes>
         </AnimatePresence>
       </main>

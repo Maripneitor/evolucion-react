@@ -48,6 +48,11 @@ function Header() {
             <li className="header__nav-item">
               <NavLink to="/proyectos" className="header__nav-link" onClick={closeMenu}>Proyectos</NavLink>
             </li>
+            {/* --- ENLACE TEMPORAL AÑADIDO --- */}
+            <li className="header__nav-item">
+              <NavLink to="/admin/add-project" className="header__nav-link" onClick={closeMenu}>Añadir Proyecto</NavLink>
+            </li>
+            {/* -------------------------------- */}
             <li className="header__nav-item">
               <a href="/#contacto" className="header__nav-link" onClick={closeMenu}>Contacto</a>
             </li>
